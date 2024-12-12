@@ -1,15 +1,35 @@
-// import { useState } from 'react'
-import { ThemeProvider } from './components/theme-provider.tsx'
+import React from "react"
+
+import Home from "./pages/Home"
 import { ModeToggle } from "./components/mode-toggle"
 
 function App() {
-  return (
-    <ThemeProvider defaultTheme='system' storageKey='vite-ui-theme'>
-      <div className="flex items-center justify-center">
-        <h1>HELLO RESUME BUILDER</h1>
-        <ModeToggle />
+  const [isMobile, setIsMobile] = React.useState(false);
+  
+  const checkScreenSize = () => {
+    setIsMobile(window.matchMedia("(max-width: 1024px").matches);
+  }
+
+  React.useEffect(() => {
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
+  if (isMobile) {
+    return (
+      <div className="h-screen flex flex-col justify-center items-center">
+          <h3 className="text-2xl pb-4">OOPPPPSS!! NOT ACCESSIBLE TO SMALL SCREEN SIZES 🤪</h3>
+          <ModeToggle />
       </div>
-    </ThemeProvider>
+    )
+  }
+
+  return (
+      <div className="flex h-screen">
+        <Home />
+      </div>
   )
 }
 
