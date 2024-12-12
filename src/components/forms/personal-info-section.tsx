@@ -53,6 +53,18 @@ export default function PersonalInfoSection() {
             </div>
 
             <div>
+                <Label htmlFor="middleinitial">Middle Initial</Label>
+                <Input 
+                    id="middleinitial" 
+                    type="text"
+                    name="middleinitial"
+                    maxLength={1}
+                    value={personalInfo.middleinitial}
+                    onChange={handleChange} 
+                />
+            </div>
+
+            <div>
                 <Label htmlFor="email">Email</Label>
                 <Input 
                     id="email" 

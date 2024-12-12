@@ -4,6 +4,8 @@ import PersonalInfoSection from "./personal-info-section";
 import EducationSection from "./education-section";
 import SkillsSection from "./skills-section";
 import ExperienceSection from "./experience-section";
+import SummarySection from "./summary-section";
+
 import { Button } from "../ui/button";
 
 const sections = [
@@ -11,6 +13,7 @@ const sections = [
     { id: 2, title: "Work Experience", component: <ExperienceSection /> },
     { id: 3, title: "Education", component: <EducationSection /> },
     { id: 4, title: "Skills", component: <SkillsSection /> },
+    { id: 5, title: "Summary", component: <SummarySection /> },
 ]
 
 export function ResumeForms() {

@@ -26,7 +26,7 @@ export default function ExperienceSection() {
         const newExperience = { 
             position: "",
             employer: "",
-            address: "",
+            employer_address: "",
             startdate: null,
             enddate: null,
         };
@@ -67,12 +67,12 @@ export default function ExperienceSection() {
                     </div>
 
                     <div>
-                        <Label htmlFor="address">Address</Label>
+                        <Label htmlFor="employer_address">Address</Label>
                         <Input 
-                            id="address" 
+                            id="employer_address" 
                             type="text" 
-                            name="address"
-                            value={experience.address}
+                            name="employer_address"
+                            value={experience.employer_address}
                             onChange={(e) => handleExeperienceChange(index, e)}
                         />
                     </div>

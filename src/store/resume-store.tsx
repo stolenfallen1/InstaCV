@@ -10,6 +10,7 @@ export const useResumeStore = create<ResumeStore>()(
                     picture: "",
                     firstname: "",
                     lastname: "",
+                    middleinitial: "",
                     email: "",
                     contact_number: 0,
                     country: "",
@@ -19,6 +20,7 @@ export const useResumeStore = create<ResumeStore>()(
                 experiences: [],
                 educations: [],
                 // skills: [],
+                summary: "",
             } as FormData,
             updateFormData: (section, data) => 
                 set((state) => ({
