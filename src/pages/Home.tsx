@@ -17,7 +17,7 @@ export default function Home() {
                 <ResumeForms />
             </div>
 
-            <div className="w-1/2 p-4 bg-gray-100">
+            <div className="w-1/2 p-4 bg-gray-100 dark:bg-neutral-950">
                 <h2 className="text-xl font-semibold mb-4">Template Preview</h2>
                 <div className="bg-white shadow p-4 rounded">
                     <TemplateOne />

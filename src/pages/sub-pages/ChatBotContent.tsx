@@ -1,6 +1,7 @@
 import React from "react";
 import { generateContent } from "@/components/gemini-model";
 import ReactMarkdown from "react-markdown";
+import { ModeToggle } from "@/components/mode-toggle";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -62,9 +63,12 @@ export function ChatBotContent() {
     return (
         <>
             <SheetHeader>
-                <SheetTitle>Hi! How can I assist you today?</SheetTitle>
+                <section className="flex items-center justify-between p-4">
+                    <SheetTitle>Hi! How can I assist you today?</SheetTitle>
+                    <ModeToggle />
+                </section>
             </SheetHeader>
-            <div className="chat-container">
+            <div className="chat-container p-4">
                 {response.length === 0 ? (
                     <h1>Got Questions? Paw's Got Answers 😊</h1> 
                 ) : (

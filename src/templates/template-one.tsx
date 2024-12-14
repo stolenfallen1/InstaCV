@@ -1,7 +1,6 @@
 import React from "react";
 import { useReactToPrint } from "react-to-print";
 
-import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { useResumeStore } from "@/store/resume-store";
@@ -21,8 +20,19 @@ export function TemplateOne() {
         handlePrint();
     }
 
+    const formatDate = (date: Date | string | null): string => {
+        if (!date) return "";
+
+        const dateObj = date instanceof Date ? date : new Date(date);
+
+        return dateObj.toLocaleDateString("en-US", {
+            month: 'short',
+            year: 'numeric'
+        });
+    }
+
     return (
-        <main>
+        <main style={{ backgroundColor: "#FFFF", color: "#000" }}>
             <div ref={contentRef}>
                 <div className="flex justify-center items-center space-x-8">
                     <Avatar style={{ width: '120px', height: '120px' }}>
@@ -60,29 +70,56 @@ export function TemplateOne() {
                         <section className="border border-red-500">
                             <h2>Experiences</h2>
                             <ul>
-                                <li>TEST</li>
-                                <li>TEST</li>
-                                <li>TEST</li>
-                                <li>TEST</li>
-                                <li>TEST</li>
+                                {formData.experiences.map((exprience, index) => {
+                                    const startDate = formatDate(exprience.startdate);
+                                    const endDateDisplay = exprience.is_current ? "Present" : formatDate(exprience.enddate);
+                                    const workDetailBullets = exprience.work_details 
+                                            ? exprience.work_details.split("\n")
+                                            .filter(detail => detail.trim() !== "")
+                                            .map(detail => detail.replace(/^\s+|\s+$/g, "")) : [];
+
+                                    return (
+                                        <li key={index}>
+                                            <p>{exprience.position}</p>
+                                            <p>{exprience.employer}</p>
+                                            <p>{exprience.employer_address}</p>
+                                            <p>{startDate} - {endDateDisplay}</p>
+                                            {workDetailBullets.length > 0 && (
+                                                <ul className="list-disc pl-5">
+                                                    {workDetailBullets.map((detail, detailsIndex) => (
+                                                        <li key={detailsIndex}>{detail}</li>
+                                                    ))}
+                                                </ul>
+                                            )}
+                                        </li>
+                                    )
+                                })}
                             </ul>
                         </section>
                         <section className="border border-red-500">
                             <h2>Education</h2>
                             <ul>
-                                <li>TEST</li>
-                                <li>TEST</li>
-                                <li>TEST</li>
-                                <li>TEST</li>
-                                <li>TEST</li>
+                                {formData.educations.map((education, index) => {
+                                    const enrollDate = formatDate(education.enrolldate);
+                                    const finishDate = formatDate(education.finishdate);
+
+                                    return (
+                                        <li key={index}>
+                                            <p>{education.school_name}</p>
+                                            <p>{education.school_address}</p>
+                                            <p>{education.degree} in {education.field_of_study}</p>
+                                            <p>{enrollDate} - {finishDate}</p>
+                                        </li>
+                                    )
+                                })}
                             </ul>
                         </section>
                     </div>
                 </section>
             </div>
-            <Button className="btn" onClick={handlePrintButtonClick}>
+            <button className="btn bg-blue-400 p-3 rounded-lg" onClick={handlePrintButtonClick}>
                 Print as PDF
-            </Button>
+            </button>
         </main>
     );
 }
