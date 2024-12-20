@@ -14,7 +14,9 @@ export interface Experience {
     employer: string;
     employer_address: string;
     startdate: Date | null;
+    is_current: boolean | undefined;
     enddate: Date | null;
+    work_details: string;
 }
 export interface Education {
     school_name: string;

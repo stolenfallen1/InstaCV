@@ -5,6 +5,8 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 
+import "../../templates/styles/globals.css";
+
 export default function EducationSection() {
     const { formData, updateFormData } = useResumeStore();
     const [educations, setEducations] = React.useState(formData.educations);
@@ -42,7 +44,7 @@ export default function EducationSection() {
     }
 
     return (
-        <main>
+        <main className="max-h-[80vh] overflow-y-auto p-2">
             {educations.map((education, index) => (
                 <div key={index}>
                     <div>
@@ -73,7 +75,7 @@ export default function EducationSection() {
                             id="degree" 
                             type="text" 
                             name="degree"    
-                            value={education.field_of_study}
+                            value={education.degree}
                             onChange={(e) => handleEducationChange(index, e)}
                         />
                     </div>
@@ -110,7 +112,7 @@ export default function EducationSection() {
                         />
                     </div>
 
-                    <Button onClick={() => handleRemoveEducation(index)}>Remove Education</Button>
+                    <Button onClick={() => handleRemoveEducation(index)} className="my-3">Remove Education</Button>
                 </div>
             ))}
 
