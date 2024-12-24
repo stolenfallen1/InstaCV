@@ -5,30 +5,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { useResumeStore } from "@/store/resume-store";
 
+import { formatDate, capitalizeFirstLetter, capitalizeEachWord } from "@/utils/formatter"
+
 export function TemplateOne() {
     const contentRef = React.useRef<HTMLDivElement>(null);
     const handlePrint = useReactToPrint({ contentRef });
 
     const formData = useResumeStore((state) => state.formData);
 
-    const capitalizeFirstLetter = (str: string) => {
-        if (!str) return str;
-        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-    }
-
     const handlePrintButtonClick = () => {
         handlePrint();
-    }
-
-    const formatDate = (date: Date | string | null): string => {
-        if (!date) return "";
-
-        const dateObj = date instanceof Date ? date : new Date(date);
-
-        return dateObj.toLocaleDateString("en-US", {
-            month: 'short',
-            year: 'numeric'
-        });
     }
 
     return (
@@ -52,7 +38,7 @@ export function TemplateOne() {
                             <div>
                                 <p>Email: {formData.personalInfo.email}</p>
                                 <p>Contact Number: {formData.personalInfo.contact_number}</p>
-                                <p>Address: {formData.personalInfo.municipality}, {formData.personalInfo.country} {formData.personalInfo.postalcode}</p>
+                                <p>Address: {capitalizeEachWord(formData.personalInfo.municipality)}, {capitalizeEachWord(formData.personalInfo.country)} {formData.personalInfo.postalcode}</p>
                             </div>
                         </section>
                         <section className="border border-red-500">
@@ -80,8 +66,8 @@ export function TemplateOne() {
 
                                     return (
                                         <li key={index}>
-                                            <p>{exprience.position}</p>
-                                            <p>{exprience.employer}</p>
+                                            <p>{capitalizeEachWord(exprience.position)}</p>
+                                            <p>{capitalizeEachWord(exprience.employer)}</p>
                                             <p>{exprience.employer_address}</p>
                                             <p>{startDate} - {endDateDisplay}</p>
                                             {workDetailBullets.length > 0 && (
@@ -105,9 +91,9 @@ export function TemplateOne() {
 
                                     return (
                                         <li key={index}>
-                                            <p>{education.school_name}</p>
-                                            <p>{education.school_address}</p>
-                                            <p>{education.degree} in {education.field_of_study}</p>
+                                            <p>{capitalizeEachWord(education.school_name)}</p>
+                                            <p>{capitalizeEachWord(education.school_address)}</p>
+                                            <p>{capitalizeEachWord(education.degree)} in {capitalizeEachWord(education.field_of_study)}</p>
                                             <p>{enrollDate} - {finishDate}</p>
                                         </li>
                                     )

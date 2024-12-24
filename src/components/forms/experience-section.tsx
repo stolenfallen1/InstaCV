@@ -1,6 +1,8 @@
 import React from "react";
 import { useResumeStore } from "@/store/resume-store";
 
+import { useScrollableWithBorder } from "@/hooks/useScrollableWithBorder";
+
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
@@ -12,6 +14,7 @@ import { Textarea } from "../ui/textarea";
 export default function ExperienceSection() {
     const { formData, updateFormData } = useResumeStore();
     const [experiences, setExperiences] = React.useState(formData.experiences);
+    const { contentRef, showBorder } = useScrollableWithBorder<HTMLDivElement>([experiences.length]);
 
     const handleExeperienceChange = (index: number, e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value, type } = e.target;
@@ -65,7 +68,12 @@ export default function ExperienceSection() {
     }
 
     return (
-        <main className="max-h-[80vh] overflow-y-auto p-2">
+        <main 
+            ref={contentRef}
+            className={`max-h-[75vh] overflow-y-auto p-2 ${
+                showBorder ? 'border-b border-gray-500' : ''
+            }`}
+        >
             {experiences.map((experience, index) => (
                 <div key={index}>                
                     <div>

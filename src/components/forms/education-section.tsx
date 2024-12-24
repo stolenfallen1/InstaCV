@@ -1,6 +1,8 @@
 import React from "react";
 import { useResumeStore } from "@/store/resume-store";
 
+import { useScrollableWithBorder } from "@/hooks/useScrollableWithBorder";
+
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
@@ -10,6 +12,7 @@ import "../../templates/styles/globals.css";
 export default function EducationSection() {
     const { formData, updateFormData } = useResumeStore();
     const [educations, setEducations] = React.useState(formData.educations);
+    const { contentRef, showBorder } = useScrollableWithBorder<HTMLDivElement>([educations.length]);
 
     const handleEducationChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -44,7 +47,12 @@ export default function EducationSection() {
     }
 
     return (
-        <main className="max-h-[80vh] overflow-y-auto p-2">
+        <main 
+            ref={contentRef}
+            className={`max-h-[75vh] overflow-y-auto p-2 ${
+                showBorder ? 'border-b border-gray-500' : ''
+            }`}
+        >
             {educations.map((education, index) => (
                 <div key={index}>
                     <div>

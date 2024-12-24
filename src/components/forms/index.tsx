@@ -1,5 +1,7 @@
 import React from "react";
 
+import { useResumeStore } from "@/store/resume-store";
+
 import PersonalInfoSection from "./personal-info-section";
 import EducationSection from "./education-section";
 import SkillsSection from "./skills-section";
@@ -8,16 +10,22 @@ import SummarySection from "./summary-section";
 
 import { Button } from "../ui/button";
 
-const sections = [
-    { id: 1, title: "Personal Information", component: <PersonalInfoSection /> },
-    { id: 2, title: "Work Experience", component: <ExperienceSection /> },
-    { id: 3, title: "Education", component: <EducationSection /> },
-    { id: 4, title: "Skills", component: <SkillsSection /> },
-    { id: 5, title: "Summary", component: <SummarySection /> },
-]
-
 export function ResumeForms() {
     const [currentIndex, setCurrentIndex] = React.useState(0);
+    const { formData } = useResumeStore();
+
+    const sections = [
+        { id: 1, title: "Personal Information", component: <PersonalInfoSection /> },
+        { id: 2, title: "Work Experience", component: <ExperienceSection /> },
+        { id: 3, title: "Education", component: <EducationSection /> },
+        { id: 4, title: "Skills", 
+            component: <SkillsSection 
+                            experiences={formData.experiences} 
+                            educations={formData.educations} 
+                            isActive={currentIndex === 3}
+                            /> },
+        { id: 5, title: "Summary", component: <SummarySection /> },
+    ]
 
     const goToNextSection = () => {
         if (currentIndex < sections.length - 1) {
