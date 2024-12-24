@@ -17,8 +17,7 @@ export default function PersonalInfoSection() {
     }
 
     return (
-        <main>
-
+        <main className="max-h-[75vh] overflow-y-auto p-2">
             <div>
                 <Label htmlFor="picture">Picture</Label>
                 <Input 
