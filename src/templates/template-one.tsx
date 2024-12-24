@@ -1,21 +1,12 @@
 import React from "react";
-import { useReactToPrint } from "react-to-print";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
 import { useResumeStore } from "@/store/resume-store";
-
 import { formatDate, capitalizeFirstLetter, capitalizeEachWord } from "@/utils/formatter"
 
 export function TemplateOne() {
     const contentRef = React.useRef<HTMLDivElement>(null);
-    const handlePrint = useReactToPrint({ contentRef });
-
     const formData = useResumeStore((state) => state.formData);
-
-    const handlePrintButtonClick = () => {
-        handlePrint();
-    }
 
     return (
         <main style={{ backgroundColor: "#FFFF", color: "#000" }}>
@@ -105,9 +96,6 @@ export function TemplateOne() {
                     </div>
                 </section>
             </div>
-            <button className="btn bg-blue-400 p-3 rounded-lg" onClick={handlePrintButtonClick}>
-                Print as PDF
-            </button>
         </main>
     );
 }
