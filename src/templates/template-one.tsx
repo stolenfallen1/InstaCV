@@ -43,13 +43,15 @@ export function TemplateOne() {
                         </section>
                         <section className="border border-red-500">
                             <h2>Skills</h2>
-                            <ul>
-                                <li>TEST</li>
-                                <li>TEST</li>
-                                <li>TEST</li>
-                                <li>TEST</li>
-                                <li>TEST</li>
-                            </ul>
+                            {formData.skills && formData.skills.length > 0 ? (
+                                <ul className="list-disc pl-5">
+                                    {formData.skills.map((skill, index) => (
+                                        <li key={index}>{capitalizeEachWord(skill)}</li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>No skills yet</p>
+                            )}
                         </section>
                     </div>
                     <div className="flex-1">

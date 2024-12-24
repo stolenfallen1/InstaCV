@@ -30,7 +30,7 @@ export interface FormData {
     personalInfo: PersonalInfo;
     experiences: Experience[];
     educations: Education[];
-    // Skills
+    skills: string[];
     summary: string;
 }
 export interface ResumeStore {
