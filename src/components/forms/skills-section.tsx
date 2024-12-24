@@ -1,6 +1,10 @@
 import React from "react";
 import { Experience, Education } from "@/types/resume";
 import { generateContent } from "@/components/gemini-model";
+import { useResumeStore } from "@/store/resume-store";
+
+import { Button } from "../ui/button";
+import { ArchiveX, RefreshCw, X } from "lucide-react";
 
 interface SkillsSectionProps {
     experiences: Experience[];
@@ -9,73 +13,130 @@ interface SkillsSectionProps {
 }
 
 export default function SkillsSection({ experiences, educations, isActive }: SkillsSectionProps) {
+    const [loading, setLoading] = React.useState<boolean>(false);
     const [skills, setSkills] = React.useState<string[]>([]);
+    const [previousSkills, setPreviousSkills] = React.useState<string[]>([]);
     const [selectedSkills, setSelectedSkills] = React.useState<string[]>([]);
+    const updateFormData = useResumeStore((state) => state.updateFormData);
 
-    React.useEffect(() => {
-        if (!isActive || experiences.length === 0 || educations.length === 0) {
-            return;
-        }
+    const skillsPerRequest = 10;
 
-        const experiencesPrompt = experiences 
+    const fetchSkills = async () => {
+        setLoading(true);
+
+        const experiencesPrompt = experiences
             .map((exp) => `${exp.position} at ${exp.employer}`)
             .join(", ");
         const educationPrompt = educations
             .map((edu) => `${edu.degree} in ${edu.field_of_study}`)
             .join(", ");
 
+        const previousSkillsList = previousSkills.length > 0 ? ` Previous skills: ${previousSkills.join(", ")}.` : "";
+
         const prompt = `
-            Based on the following work experience and education, generate a list of skills for the users resume, here are the following experiences and education:
-            Work Experience: ${experiencesPrompt}
-            Education: ${educationPrompt}
+            Based on the user's experience in ${experiencesPrompt} and education in ${educationPrompt}, 
+            generate a concise list of ${skillsPerRequest} new skills, tools, or technologies that the user may possess.
+            ${previousSkillsList}. Only return a plain, comma-separated list with no extra explanations.
         `;
 
-        const fetchSkills = async () => {
+        try {
             const generatedSkills = await generateContent(prompt);
-            setSkills(generatedSkills.split(", ").map((skill) => skill.trim()));
-        }
+            const newSkills = generatedSkills.split(", ").map((skill) => skill.trim());
 
-        if (experiences.length > 0 && educations.length > 0) {
-            fetchSkills();
+            setSkills(newSkills);
+            setPreviousSkills(newSkills);
+        } catch (error) {
+            console.error("Error fetching skills:", error);
+        } finally {
+            setLoading(false);
         }
+    };
 
+    React.useEffect(() => {
+        if (isActive && experiences.length > 0 && educations.length > 0) {
+            fetchSkills(); 
+        }
     }, [isActive, experiences, educations]);
 
-    const handleSkillChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectedOptions = Array.from(e.target.selectedOptions, (option) => option.value);
-        setSelectedSkills(selectedOptions);
+    const loadMoreSkills = () => {
+        fetchSkills();
+    }
+
+    const toggleSkillSelection = (skill: string) => {
+        setSelectedSkills((prevSkills) => {
+            const updatedSkills = prevSkills.includes(skill)
+                ? prevSkills.filter((selectedSkill) => selectedSkill !== skill)
+                : [...prevSkills, skill];
+
+            updateFormData("skills", updatedSkills);
+
+            return updatedSkills;
+        });
+    };
+
+    const clearSelection = () => {
+        setSelectedSkills([]);
+        updateFormData("skills", []);
     }
 
     return (
-        <section>
-            <h2>Skills</h2>
-            <p>Select the skills you possess based on your experience and education:</p>
-        
-            <select
-                multiple
-                value={selectedSkills}
-                onChange={handleSkillChange}
-                className="w-full p-2 border rounded"
-            >
-                {skills.length > 0 ? (
-                skills.map((skill, index) => (
-                    <option key={index} value={skill}>
-                    {skill}
-                    </option>
-                ))
+        <main>
+            <section className="flex items-center justify-between">
+                <strong>Skill Selection:</strong>
+                {loading ? (
+                    <span>Loading...</span>
                 ) : (
-                <option disabled>No skills generated yet</option>
+                    <button
+                        className="flex items-center gap-2 hover:text-sky-500"
+                        onClick={() => loadMoreSkills()}
+                    >
+                        <RefreshCw size={16} />
+                        Load More Skills
+                    </button>
                 )}
-            </select>
-        
-            <div className="mt-2">
-                <strong>Selected Skills:</strong>
-                <ul>
-                {selectedSkills.map((skill, index) => (
-                    <li key={index}>{skill}</li>
-                ))}
-                </ul>
+            </section>
+
+            <div className="flex flex-wrap gap-2 mt-2">
+                {skills.length > 0 ? (
+                    skills.map((skill, index) => (
+                        <Button
+                            key={index}
+                            onClick={() => toggleSkillSelection(skill)}
+                            variant={selectedSkills.includes(skill) ? "default" : "outline"}
+                            className="text-sm"
+                        >
+                            {skill}
+                        </Button>
+                    ))
+                ) : (
+                    <p>No generated skills yet, wait for a minute</p>
+                )}
             </div>
-        </section>
+
+            <div className="mt-4">
+                <section className="flex items-center justify-between">
+                    <strong>Selected Skills:</strong>
+                    <div
+                        className="flex items-center gap-2 cursor-pointer hover:text-red-500"
+                        onClick={() => clearSelection()}
+                    >
+                        <ArchiveX size={16} />
+                        Clear Selection
+                    </div>
+                </section>
+                <div className="flex flex-wrap gap-2 mt-2">
+                    {selectedSkills.map((skill, index) => (
+                        <Button
+                            key={index}
+                            onClick={() => toggleSkillSelection(skill)}
+                            variant="secondary"
+                            className="flex items-center gap-1 text-sm"
+                        >
+                            {skill} <X size={12} />
+                        </Button>
+                    ))}
+                </div>
+            </div>
+        </main>
     );
 }
