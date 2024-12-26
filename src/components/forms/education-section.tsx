@@ -106,6 +106,7 @@ export default function EducationSection() {
                             type="date" 
                             name="enrolldate"
                             value={education.enrolldate ? education.enrolldate instanceof Date ? education.enrolldate.toISOString().split("T")[0] : education.enrolldate : ""}
+                            onChange={(e) => handleEducationChange(index, e)}
                         />
                     </div>
 
