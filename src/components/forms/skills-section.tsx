@@ -15,6 +15,8 @@ interface SkillsSectionProps {
 export default function SkillsSection({ experiences, educations, isActive }: SkillsSectionProps) {
     const [loading, setLoading] = React.useState<boolean>(false);
     const [skills, setSkills] = React.useState<string[]>([]);
+    const [userInputSkill, setUserInputSkill] = React.useState<string>(""); 
+    const [userAddedSkills, setUserAddedSkills] = React.useState<string[]>([]);
     const [previousSkills, setPreviousSkills] = React.useState<string[]>([]);
     const [selectedSkills, setSelectedSkills] = React.useState<string[]>([]);
     const updateFormData = useResumeStore((state) => state.updateFormData);
@@ -62,6 +64,16 @@ export default function SkillsSection({ experiences, educations, isActive }: Ski
         fetchSkills();
     }
 
+    const addUserSkill = () => {
+        if (userInputSkill.trim() !== "" && !userAddedSkills.includes(userInputSkill.trim())) {
+            const newSkill = userInputSkill.trim();
+            const updatedSkills = [...userAddedSkills, newSkill];
+            setUserAddedSkills(updatedSkills);
+            updateFormData("skills", [...selectedSkills, ...updatedSkills]);
+            setUserInputSkill(""); 
+        }
+    };
+
     const toggleSkillSelection = (skill: string) => {
         setSelectedSkills((prevSkills) => {
             const updatedSkills = prevSkills.includes(skill)
@@ -74,61 +86,88 @@ export default function SkillsSection({ experiences, educations, isActive }: Ski
         });
     };
 
-    const clearSelection = () => {
+    const removeSkill = (skill: string) => {
+        const updatedSelectedSkills = selectedSkills.filter((selectedSkill) => selectedSkill !== skill);
+        const updatedUserAddedSkills = userAddedSkills.filter((addedSkill) => addedSkill !== skill);
+    
+        setSelectedSkills(updatedSelectedSkills);
+        setUserAddedSkills(updatedUserAddedSkills);
+    
+        updateFormData("skills", [...updatedSelectedSkills, ...updatedUserAddedSkills]);
+    };
+    
+
+    const clearAllSkills = () => {
         setSelectedSkills([]);
+        setUserAddedSkills([]);
         updateFormData("skills", []);
     }
 
+    const combinedSkills = [...selectedSkills, ...userAddedSkills];
+
     return (
         <main>
-            <section className="flex items-center justify-between">
-                <strong>Skill Selection:</strong>
-                {loading ? (
-                    <span>Loading...</span>
-                ) : (
-                    <button
-                        className="flex items-center gap-2 hover:text-sky-500"
-                        onClick={() => loadMoreSkills()}
-                    >
-                        <RefreshCw size={16} />
-                        Load More Skills
-                    </button>
-                )}
+            <section className="mt-4">
+                <input
+                    type="text"
+                    value={userInputSkill}
+                    onChange={(e) => setUserInputSkill(e.target.value)}
+                    placeholder="Enter a skill"
+                    className="border rounded px-2 py-1 w-full"
+                />
+                <Button onClick={addUserSkill} className="mt-2">
+                    Add Skill
+                </Button>
             </section>
 
-            <div className="flex flex-wrap gap-2 mt-2">
-                {skills.length > 0 ? (
-                    skills.map((skill, index) => (
-                        <Button
-                            key={index}
-                            onClick={() => toggleSkillSelection(skill)}
-                            variant={selectedSkills.includes(skill) ? "default" : "outline"}
-                            className="text-sm"
-                        >
-                            {skill}
-                        </Button>
-                    ))
-                ) : (
-                    <p>No generated skills yet, wait for a minute</p>
-                )}
-            </div>
+            {skills.length > 0 && (
+                <>
+                    <section className="flex items-center justify-between mt-4">
+                        <strong>AI-Generated Skills Suggestions: </strong>
+                        {loading ? (
+                            <span>Loading...</span>
+                        ) : (
+                            <button
+                                className="flex items-center gap-2 hover:text-sky-500"
+                                onClick={() => loadMoreSkills()}
+                            >
+                                <RefreshCw size={16} />
+                                Load More Skills
+                            </button>
+                        )}
+                    </section>
+
+                    <div className="flex flex-wrap gap-2 mt-2">
+                        {skills.map((skill, index) => (
+                            <Button
+                                key={index}
+                                onClick={() => toggleSkillSelection(skill)}
+                                variant={selectedSkills.includes(skill) ? "default" : "outline"}
+                                className="text-sm"
+                            >
+                                {skill}
+                            </Button>
+                        ))}
+                    </div>
+                </>
+            )}
 
             <div className="mt-4">
                 <section className="flex items-center justify-between">
-                    <strong>Selected Skills:</strong>
+                    <strong>Skills Lists:</strong>
                     <div
                         className="flex items-center gap-2 cursor-pointer hover:text-red-500"
-                        onClick={() => clearSelection()}
+                        onClick={() => clearAllSkills()}
                     >
                         <ArchiveX size={16} />
-                        Clear Selection
+                        Clear Skills
                     </div>
                 </section>
                 <div className="flex flex-wrap gap-2 mt-2">
-                    {selectedSkills.map((skill, index) => (
+                    {combinedSkills.map((skill, index) => (
                         <Button
                             key={index}
-                            onClick={() => toggleSkillSelection(skill)}
+                            onClick={() => removeSkill(skill)} 
                             variant="secondary"
                             className="flex items-center gap-1 text-sm"
                         >

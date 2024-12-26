@@ -11,7 +11,7 @@ export function TemplateOne() {
     return (
         <main style={{ backgroundColor: "#FFFF", color: "#000" }}>
             <div ref={contentRef}>
-                <div className="flex justify-center items-center space-x-8">
+                <header className="flex justify-center items-center space-x-8">
                     <Avatar style={{ width: '120px', height: '120px' }}>
                         <AvatarImage width={120} height={120} />
                         <AvatarFallback className="bg-green-500" />
@@ -21,8 +21,14 @@ export function TemplateOne() {
                         {capitalizeFirstLetter(formData.personalInfo.middleinitial)}&nbsp; 
                         {capitalizeFirstLetter(formData.personalInfo.lastname)}
                     </p>
-                </div>
-                <section className="flex items-start">
+                </header>
+                <article>
+                    <section className="border border-red-500">
+                        <h2>Summary</h2>
+                        <p>{formData.summary}</p>
+                    </section>
+                </article>
+                <div className="flex items-start">
                     <div>
                         <section className="border border-red-500">
                             <h2>Personal Information</h2>
@@ -94,7 +100,7 @@ export function TemplateOne() {
                             </ul>
                         </section>
                     </div>
-                </section>
+                </div>
             </div>
         </main>
     );

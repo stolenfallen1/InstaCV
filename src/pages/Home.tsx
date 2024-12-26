@@ -57,7 +57,7 @@ export default function Home() {
 
             <Sheet open={isTemplateSheetOpen} onOpenChange={setIsTemplateSheetOpen}>
                 <SheetContent side="bottom" className="h-[45vh] overflow-y-auto">
-                    <div className="space-y-4">
+                    <div className="space-x-4">
                         {Object.keys(templates).map((templateKey) => (
                             <Button
                                 key={templateKey}
