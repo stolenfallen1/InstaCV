@@ -1,45 +1,118 @@
 import React from "react";
-
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useResumeStore } from "@/store/resume-store";
-import { formatDate, capitalizeFirstLetter, capitalizeEachWord } from "@/utils/formatter"
+import { formatDate, capitalizeFirstLetter, capitalizeEachWord } from "@/utils/formatter";
+
+const styles = `
+@media print {
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .print-container {
+        padding: 20px !important;
+        display: block;
+    }
+
+    /* Two Column Layout (for print) */
+    .two-column-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    /* Prevent flex wrapping for print */
+    .column {
+        width: 100%;
+    }
+
+    /* Keep header, summary, and image together on the first page */
+    header, section {
+        page-break-inside: avoid;
+    }
+
+    /* Ensure layout stays two columns for print */
+    .flex-wrapper {
+        display: flex;
+        flex-wrap: nowrap;
+    }
+
+    /* Prevent section breaks inside */
+    header, section {
+        break-after: avoid;
+    }
+}
+
+/* Styles for screen display (non-printing) */
+@media screen {
+    .two-column-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .column {
+        width: 100%;
+    }
+
+    .image-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .scrollable-container {
+        max-height: 85vh;
+        overflow-y: auto;
+    }
+}
+`;
 
 export function TemplateOne() {
     const contentRef = React.useRef<HTMLDivElement>(null);
     const formData = useResumeStore((state) => state.formData);
 
     return (
-        <main style={{ backgroundColor: "#FFFF", color: "#000" }}>
-            <div ref={contentRef}>
+        <main style={{ backgroundColor: "#FFFF", color: "#000" }} className="print-container">
+            <style>{styles}</style>
+            <div ref={contentRef} className="scrollable-container">
                 <header className="flex justify-center items-center space-x-8">
-                    <Avatar style={{ width: '120px', height: '120px' }}>
-                        <AvatarImage width={120} height={120} />
-                        <AvatarFallback className="bg-green-500" />
-                    </Avatar>
-                    <p className="text-3xl font-bold">
+                    {formData.personalInfo.picture && (
+                        <div className="image-container">
+                            <img 
+                                src={formData.personalInfo.picture} 
+                                alt="User Profile" 
+                                className="w-20 h-20 rounded-full object-cover" 
+                            />
+                        </div>
+                    )}
+                    <p className="text-4xl font-bold">
                         {capitalizeFirstLetter(formData.personalInfo.firstname)}&nbsp; 
                         {capitalizeFirstLetter(formData.personalInfo.middleinitial)}&nbsp; 
                         {capitalizeFirstLetter(formData.personalInfo.lastname)}
                     </p>
                 </header>
-                <article>
-                    <section className="border border-red-500">
-                        <h2>Summary</h2>
-                        <p>{formData.summary}</p>
-                    </section>
-                </article>
-                <div className="flex items-start">
-                    <div>
-                        <section className="border border-red-500">
-                            <h2>Personal Information</h2>
+
+                <section className="mb-4">
+                    <h2 className="font-bold border-b border-neutral-400">Summary</h2>
+                    <p className="text-justify">{formData.summary}</p>
+                </section>
+
+                {/* Two Column Layout */}
+                <div className="two-column-layout">
+                    {/* Left Column */}
+                    <div className="column">
+                        <section className="mb-4">
+                            <h2 className="font-bold border-b border-neutral-400">Personal Information</h2>
                             <div>
                                 <p>Email: {formData.personalInfo.email}</p>
                                 <p>Contact Number: {formData.personalInfo.contact_number}</p>
                                 <p>Address: {capitalizeEachWord(formData.personalInfo.municipality)}, {capitalizeEachWord(formData.personalInfo.country)} {formData.personalInfo.postalcode}</p>
                             </div>
                         </section>
-                        <section className="border border-red-500">
-                            <h2>Skills</h2>
+
+                        <section className="mb-4">
+                            <h2 className="font-bold border-b border-neutral-400">Skills</h2>
                             {formData.skills && formData.skills.length > 0 ? (
                                 <ul className="list-disc pl-5">
                                     {formData.skills.map((skill, index) => (
@@ -50,24 +123,43 @@ export function TemplateOne() {
                                 <p>No skills yet</p>
                             )}
                         </section>
-                    </div>
-                    <div className="flex-1">
-                        <section className="border border-red-500">
-                            <h2>Experiences</h2>
+
+                        <section className="mb-4">
+                            <h2 className="font-bold border-b border-neutral-400">Education</h2>
                             <ul>
-                                {formData.experiences.map((exprience, index) => {
-                                    const startDate = formatDate(exprience.startdate);
-                                    const endDateDisplay = exprience.is_current ? "Present" : formatDate(exprience.enddate);
-                                    const workDetailBullets = exprience.work_details 
-                                            ? exprience.work_details.split("\n")
+                                {formData.educations.map((education, index) => (
+                                    <li key={index} className="mb-2">
+                                        <p>{capitalizeEachWord(education.school_name)}</p>
+                                        <p>{capitalizeEachWord(education.school_address)}</p>
+                                        <p>{capitalizeEachWord(education.degree)} in {capitalizeEachWord(education.field_of_study)}</p>
+                                        <p>{formatDate(education.enrolldate)} - {formatDate(education.finishdate)}</p>
+                                    </li>
+                                ))}
+                            </ul>
+                        </section>
+
+                        
+                    </div>
+
+                    {/* Right Column */}
+                    <div className="column">
+                        <section className="mb-4">
+                            <h2 className="font-bold border-b border-neutral-400">Experiences</h2>
+                            <ul>
+                                {formData.experiences.map((experience, index) => {
+                                    const startDate = formatDate(experience.startdate);
+                                    const endDateDisplay = experience.is_current ? "Present" : formatDate(experience.enddate);
+                                    const workDetailBullets = experience.work_details 
+                                        ? experience.work_details.split("\n")
                                             .filter(detail => detail.trim() !== "")
-                                            .map(detail => detail.replace(/^\s+|\s+$/g, "")) : [];
+                                            .map(detail => detail.replace(/^\s+|\s+$/g, "")) 
+                                        : [];
 
                                     return (
-                                        <li key={index}>
-                                            <p>{capitalizeEachWord(exprience.position)}</p>
-                                            <p>{capitalizeEachWord(exprience.employer)}</p>
-                                            <p>{exprience.employer_address}</p>
+                                        <li key={index} className="mb-4">
+                                            <p>{capitalizeEachWord(experience.position)}</p>
+                                            <p>{capitalizeEachWord(experience.employer)}</p>
+                                            <p>{experience.employer_address}</p>
                                             <p>{startDate} - {endDateDisplay}</p>
                                             {workDetailBullets.length > 0 && (
                                                 <ul className="list-disc pl-5">
@@ -77,25 +169,7 @@ export function TemplateOne() {
                                                 </ul>
                                             )}
                                         </li>
-                                    )
-                                })}
-                            </ul>
-                        </section>
-                        <section className="border border-red-500">
-                            <h2>Education</h2>
-                            <ul>
-                                {formData.educations.map((education, index) => {
-                                    const enrollDate = formatDate(education.enrolldate);
-                                    const finishDate = formatDate(education.finishdate);
-
-                                    return (
-                                        <li key={index}>
-                                            <p>{capitalizeEachWord(education.school_name)}</p>
-                                            <p>{capitalizeEachWord(education.school_address)}</p>
-                                            <p>{capitalizeEachWord(education.degree)} in {capitalizeEachWord(education.field_of_study)}</p>
-                                            <p>{enrollDate} - {finishDate}</p>
-                                        </li>
-                                    )
+                                    );
                                 })}
                             </ul>
                         </section>
