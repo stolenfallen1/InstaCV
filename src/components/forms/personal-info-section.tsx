@@ -1,12 +1,16 @@
 import React from "react";
 import { useResumeStore } from "@/store/resume-store";
 
+import { useScrollableWithBorder } from "@/hooks/useScrollableWithBorder";
+
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { Trash } from "lucide-react";
 
 export default function PersonalInfoSection() {
     const { formData, updateFormData } = useResumeStore();
     const [personalInfo, setPersonalInfo] = React.useState(formData.personalInfo);
+    const { contentRef, showBorder } = useScrollableWithBorder<HTMLDivElement>([personalInfo]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -16,17 +20,58 @@ export default function PersonalInfoSection() {
         updateFormData("personalInfo", updatedInfo);
     }
 
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = () => {
+                const base64Image = reader.result as string;
+                localStorage.setItem("resumeImage", base64Image);
+                const updatedInfo = { ...personalInfo, picture: base64Image };
+                setPersonalInfo(updatedInfo);
+                updateFormData("personalInfo", updatedInfo);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    }
+
+    const clearImage = () => {
+        localStorage.removeItem("resumeImage");
+        const updatedInfo = { ...personalInfo, picture: "" };
+        setPersonalInfo(updatedInfo);
+        updateFormData("personalInfo", updatedInfo);
+    }
+
     return (
-        <main className="max-h-[75vh] overflow-y-auto p-2">
+        <main 
+        ref={contentRef}
+        className={`max-h-[75vh] overflow-y-auto p-2 ${
+            showBorder ? 'border-b border-gray-500' : ''
+        }`}
+    >
             <div>
                 <Label htmlFor="picture">Picture</Label>
-                <Input 
-                    id="picture" 
-                    type="file" 
-                    name="picture"
-                    value={personalInfo.picture}
-                    onChange={handleChange}  
-                />
+                <aside className="flex items-center justify-center space-x-4">
+                    <Input 
+                        id="picture" 
+                        type="file" 
+                        name="picture"
+                        onChange={handleImageChange}  
+                    />
+                    {personalInfo.picture && (
+                        <div>
+                            <button 
+                                type="button" 
+                                onClick={clearImage} 
+                                className="text-red-500"
+                            >
+                                <Trash />
+                            </button>
+                        </div>
+                    )}
+                </aside>
             </div>
 
             <div>

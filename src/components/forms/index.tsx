@@ -10,7 +10,11 @@ import SummarySection from "./summary-section";
 
 import { Button } from "../ui/button";
 
-export function ResumeForms({ onPrint }: { onPrint: () => void }) {
+interface ResumeForms {
+    onPrint: () => void;
+}
+
+export function ResumeForms({ onPrint }: ResumeForms) {
     const [currentIndex, setCurrentIndex] = React.useState(0);
     const { formData } = useResumeStore();
 
@@ -65,12 +69,13 @@ export function ResumeForms({ onPrint }: { onPrint: () => void }) {
                 </Button>
 
                 {currentIndex === sections.length - 1 ? (
-                    <Button
-                        onClick={onPrint}
-                        className="px-4 py-2 rounded"
-                    >
-                        Print
-                    </Button>
+                        <Button
+                            onClick={onPrint}
+                            className="px-4 py-2 rounded "
+                            variant="primary"
+                        >
+                            Print
+                        </Button>
                 ) : (
                     <Button
                         onClick={goToNextSection}

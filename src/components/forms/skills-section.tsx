@@ -23,46 +23,46 @@ export default function SkillsSection({ experiences, educations, isActive }: Ski
 
     const skillsPerRequest = 10;
 
-    const fetchSkills = async () => {
-        setLoading(true);
+    // const fetchSkills = async () => {
+    //     setLoading(true);
 
-        const experiencesPrompt = experiences
-            .map((exp) => `${exp.position} at ${exp.employer}`)
-            .join(", ");
-        const educationPrompt = educations
-            .map((edu) => `${edu.degree} in ${edu.field_of_study}`)
-            .join(", ");
+    //     const experiencesPrompt = experiences
+    //         .map((exp) => `${exp.position} at ${exp.employer}`)
+    //         .join(", ");
+    //     const educationPrompt = educations
+    //         .map((edu) => `${edu.degree} in ${edu.field_of_study}`)
+    //         .join(", ");
 
-        const previousSkillsList = previousSkills.length > 0 ? ` Previous skills: ${previousSkills.join(", ")}.` : "";
+    //     const previousSkillsList = previousSkills.length > 0 ? ` Previous skills: ${previousSkills.join(", ")}.` : "";
 
-        const prompt = `
-            Based on the user's experience in ${experiencesPrompt} and education in ${educationPrompt}, 
-            generate a concise list of ${skillsPerRequest} new skills, tools, or technologies that the user may possess.
-            ${previousSkillsList}. Only return a plain, comma-separated list with no extra explanations.
-        `;
+    //     const prompt = `
+    //         Based on the user's experience in ${experiencesPrompt} and education in ${educationPrompt}, 
+    //         generate a concise list of ${skillsPerRequest} new skills, tools, or technologies that the user may possess.
+    //         ${previousSkillsList}. Only return a plain, comma-separated list with no extra explanations.
+    //     `;
 
-        try {
-            const generatedSkills = await generateContent(prompt);
-            const newSkills = generatedSkills.split(", ").map((skill) => skill.trim());
+    //     try {
+    //         const generatedSkills = await generateContent(prompt);
+    //         const newSkills = generatedSkills.split(", ").map((skill) => skill.trim());
 
-            setSkills(newSkills);
-            setPreviousSkills(newSkills);
-        } catch (error) {
-            console.error("Error fetching skills:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    //         setSkills(newSkills);
+    //         setPreviousSkills(newSkills);
+    //     } catch (error) {
+    //         console.error("Error fetching skills:", error);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
-    React.useEffect(() => {
-        if (isActive && experiences.length > 0 && educations.length > 0) {
-            fetchSkills(); 
-        }
-    }, [isActive, experiences, educations]);
+    // React.useEffect(() => {
+    //     if (isActive && experiences.length > 0 && educations.length > 0) {
+    //         fetchSkills(); 
+    //     }
+    // }, [isActive, experiences, educations]);
 
-    const loadMoreSkills = () => {
-        fetchSkills();
-    }
+    // const loadMoreSkills = () => {
+    //     fetchSkills();
+    // }
 
     const addUserSkill = () => {
         if (userInputSkill.trim() !== "" && !userAddedSkills.includes(userInputSkill.trim())) {
