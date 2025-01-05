@@ -166,12 +166,13 @@ export default function SkillsSection({ experiences, educations, isActive }: Ski
                 <div className="flex flex-wrap gap-2 mt-2">
                     {combinedSkills.map((skill, index) => (
                         <Button
-                            key={index}
-                            onClick={() => removeSkill(skill)} 
-                            variant="secondary"
-                            className="flex items-center gap-1 text-sm"
+                        key={index}
+                        onClick={() => removeSkill(skill)}
+                        variant="secondary"
+                        className="text-sm flex items-center p-2 space-x-2 max-w-[300px]"
                         >
-                            {skill} <X size={12} />
+                        <span className="truncate flex-1">{skill}</span>
+                        <X size={12} className="flex-shrink-0" />
                         </Button>
                     ))}
                 </div>
