@@ -138,7 +138,18 @@ export function TemplateOne() {
                             </ul>
                         </section>
 
-                        
+                        <section className="mb-4">
+                            <h2 className="font-bold border-b border-neutral-400">References</h2>
+                            <ul>
+                                {formData.references.map((reference, index) => (
+                                    <li key={index} className="mb-2">
+                                        <p>{capitalizeEachWord(reference.reference_name)}</p>
+                                        <p>{reference.reference_email}</p>
+                                        <p>{reference.reference_contact_num}</p>
+                                    </li> 
+                                ))}
+                            </ul>
+                        </section>
                     </div>
 
                     {/* Right Column */}

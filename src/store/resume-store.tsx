@@ -20,6 +20,7 @@ export const useResumeStore = create<ResumeStore>()(
                 experiences: [],
                 educations: [],
                 skills: [],
+                references: [],
                 summary: "",
             } as FormData,
             updateFormData: (section, data) => 

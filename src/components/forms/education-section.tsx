@@ -11,7 +11,7 @@ import "../../templates/styles/globals.css";
 
 export default function EducationSection() {
     const { formData, updateFormData } = useResumeStore();
-    const [educations, setEducations] = React.useState(formData.educations);
+    const [educations, setEducations] = React.useState(formData.educations || []);
     const { contentRef, showBorder } = useScrollableWithBorder<HTMLDivElement>([educations.length]);
 
     const handleEducationChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
