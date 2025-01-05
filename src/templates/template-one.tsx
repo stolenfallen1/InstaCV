@@ -19,27 +19,26 @@ const styles = `
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 15px;
+        width: 100%;
+        overflow-wrap: break-word; 
+        word-wrap: break-word; 
     }
 
-    /* Prevent flex wrapping for print */
     .column {
         width: 100%;
-    }
-
-    /* Keep header, summary, and image together on the first page */
-    header, section {
-        page-break-inside: avoid;
-    }
-
-    /* Ensure layout stays two columns for print */
-    .flex-wrapper {
-        display: flex;
-        flex-wrap: nowrap;
+        overflow: hidden; 
+        word-break: break-word; 
     }
 
     /* Prevent section breaks inside */
     header, section {
-        break-after: avoid;
+        page-break-inside: avoid;
+    }
+
+    /* Keep header, summary, and image together on the first page */
+    .flex-wrapper {
+        display: flex;
+        flex-wrap: nowrap;
     }
 }
 
@@ -49,10 +48,15 @@ const styles = `
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 15px;
+        width: 100%;
+        overflow-wrap: break-word; 
+        word-wrap: break-word; 
     }
 
     .column {
         width: 100%;
+        overflow: hidden; /* Prevent content overflow */
+        word-break: break-word; /* Ensure words break within the column */
     }
 
     .image-container {

@@ -21,6 +21,8 @@ export default function ReferenceSection() {
     }
 
     const handleAddReference = () => {
+        if (references.length >= 3) return alert("You can only add up to 3 references");
+
         const newReference = {
             reference_name: "",
             reference_email: "",
