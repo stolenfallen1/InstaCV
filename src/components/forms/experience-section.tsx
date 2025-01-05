@@ -13,7 +13,7 @@ import { Textarea } from "../ui/textarea";
 
 export default function ExperienceSection() {
     const { formData, updateFormData } = useResumeStore();
-    const [experiences, setExperiences] = React.useState(formData.experiences);
+    const [experiences, setExperiences] = React.useState(formData.experiences || []);
     const { contentRef, showBorder } = useScrollableWithBorder<HTMLDivElement>([experiences.length]);
 
     const handleExeperienceChange = (index: number, e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

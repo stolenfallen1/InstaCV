@@ -1,5 +1,5 @@
 export interface PersonalInfo {
-    picture: string;
+    picture?: string;
     firstname: string;
     lastname: string;
     middleinitial: string;
@@ -16,7 +16,7 @@ export interface Experience {
     startdate: Date | null;
     is_current: boolean | undefined;
     enddate: Date | null;
-    work_details: string;
+    work_details?: string;
 }
 export interface Education {
     school_name: string;
@@ -26,12 +26,18 @@ export interface Education {
     enrolldate: Date | null;
     finishdate: Date | null;
 }
+export interface Reference {
+    reference_name: string;
+    reference_email: string;
+    reference_contact_num: string;
+}
 export interface FormData {
     personalInfo: PersonalInfo;
     experiences: Experience[];
     educations: Education[];
     skills: string[];
-    summary: string;
+    references: Reference[];
+    summary?: string;
 }
 export interface ResumeStore {
     formData: FormData;

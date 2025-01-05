@@ -3,9 +3,10 @@ import React from "react";
 import { useResumeStore } from "@/store/resume-store";
 
 import PersonalInfoSection from "./personal-info-section";
+import ExperienceSection from "./experience-section";
 import EducationSection from "./education-section";
 import SkillsSection from "./skills-section";
-import ExperienceSection from "./experience-section";
+import ReferenceSection from "./reference-section";
 import SummarySection from "./summary-section";
 
 import { Button } from "../ui/button";
@@ -28,7 +29,8 @@ export function ResumeForms({ onPrint }: ResumeForms) {
                             educations={formData.educations} 
                             isActive={currentIndex === 3}
                             /> },
-        { id: 5, title: "Summary", component: <SummarySection /> },
+        { id: 5, title: "Reference (3 persons only)", component: <ReferenceSection /> },
+        { id: 6, title: "Summary", component: <SummarySection /> },
     ]
 
     const goToNextSection = () => {
