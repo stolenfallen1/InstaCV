@@ -28,6 +28,7 @@ export interface Education {
 }
 export interface Reference {
     reference_name: string;
+    reference_position: string;
     reference_email: string;
     reference_contact_num: string;
 }

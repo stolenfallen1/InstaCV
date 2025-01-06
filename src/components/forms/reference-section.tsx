@@ -25,6 +25,7 @@ export default function ReferenceSection() {
 
         const newReference = {
             reference_name: "",
+            reference_position: "",
             reference_email: "",
             reference_contact_num: "",
         };
@@ -55,6 +56,17 @@ export default function ReferenceSection() {
                             type="text" 
                             name="reference_name"
                             value={reference.reference_name}
+                            onChange={(e) => handleReferenceChange(index, e)}
+                        />
+                    </div>
+
+                    <div>
+                        <Label htmlFor="reference_position">Position</Label>
+                        <Input 
+                            id="reference_position" 
+                            type="text" 
+                            name="reference_position"
+                            value={reference.reference_position}
                             onChange={(e) => handleReferenceChange(index, e)}
                         />
                     </div>

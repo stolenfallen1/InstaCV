@@ -148,9 +148,10 @@ export function TemplateOne() {
                                 {formData.references.map((reference, index) => (
                                     <li key={index} className="mb-2">
                                         <p>{capitalizeEachWord(reference.reference_name)}</p>
+                                        <p>{reference.reference_position}</p>
                                         <p>{reference.reference_email}</p>
                                         <p>{reference.reference_contact_num}</p>
-                                    </li> 
+                                    </li>
                                 ))}
                             </ul>
                         </section>
