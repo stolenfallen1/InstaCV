@@ -1,27 +1,27 @@
 import React from "react";
-import { Experience, Education } from "@/types/resume";
-import { generateContent } from "@/components/gemini-model";
+// import { Experience, Education } from "@/types/resume";
+// import { generateContent } from "@/components/gemini-model";
 import { useResumeStore } from "@/store/resume-store";
 
 import { Button } from "../ui/button";
-import { ArchiveX, RefreshCw, X } from "lucide-react";
+import { ArchiveX, X } from "lucide-react";
 
-interface SkillsSectionProps {
-    experiences: Experience[];
-    educations: Education[];
-    isActive?: boolean;
-}
+// interface SkillsSectionProps {
+//     experiences: Experience[];
+//     educations: Education[];
+//     isActive?: boolean;
+// }
 
-export default function SkillsSection({ experiences, educations, isActive }: SkillsSectionProps) {
-    const [loading, setLoading] = React.useState<boolean>(false);
-    const [skills, setSkills] = React.useState<string[]>([]);
+export default function SkillsSection() {
+    // const [loading, setLoading] = React.useState<boolean>(false);
+    // const [skills, setSkills] = React.useState<string[]>([]);
     const [userInputSkill, setUserInputSkill] = React.useState<string>(""); 
     const [userAddedSkills, setUserAddedSkills] = React.useState<string[]>([]);
-    const [previousSkills, setPreviousSkills] = React.useState<string[]>([]);
+    // const [previousSkills, setPreviousSkills] = React.useState<string[]>([]);
     const [selectedSkills, setSelectedSkills] = React.useState<string[]>([]);
     const updateFormData = useResumeStore((state) => state.updateFormData);
 
-    const skillsPerRequest = 10;
+    // const skillsPerRequest = 10;
 
     // const fetchSkills = async () => {
     //     setLoading(true);
@@ -74,17 +74,17 @@ export default function SkillsSection({ experiences, educations, isActive }: Ski
         }
     };
 
-    const toggleSkillSelection = (skill: string) => {
-        setSelectedSkills((prevSkills) => {
-            const updatedSkills = prevSkills.includes(skill)
-                ? prevSkills.filter((selectedSkill) => selectedSkill !== skill)
-                : [...prevSkills, skill];
+    // const toggleSkillSelection = (skill: string) => {
+    //     setSelectedSkills((prevSkills) => {
+    //         const updatedSkills = prevSkills.includes(skill)
+    //             ? prevSkills.filter((selectedSkill) => selectedSkill !== skill)
+    //             : [...prevSkills, skill];
 
-            updateFormData("skills", updatedSkills);
+    //         updateFormData("skills", updatedSkills);
 
-            return updatedSkills;
-        });
-    };
+    //         return updatedSkills;
+    //     });
+    // };
 
     const removeSkill = (skill: string) => {
         const updatedSelectedSkills = selectedSkills.filter((selectedSkill) => selectedSkill !== skill);
@@ -119,7 +119,7 @@ export default function SkillsSection({ experiences, educations, isActive }: Ski
                     Add Skill
                 </Button>
             </section>
-
+{/*}
             {skills.length > 0 && (
                 <>
                     <section className="flex items-center justify-between mt-4">
@@ -151,6 +151,8 @@ export default function SkillsSection({ experiences, educations, isActive }: Ski
                     </div>
                 </>
             )}
+
+//*/}
 
             <div className="mt-4">
                 <section className="flex items-center justify-between">
