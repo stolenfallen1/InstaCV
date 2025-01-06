@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useResumeStore } from "@/store/resume-store";
+// import { useResumeStore } from "@/store/resume-store";
 
 import PersonalInfoSection from "./personal-info-section";
 import ExperienceSection from "./experience-section";
@@ -17,7 +17,7 @@ interface ResumeForms {
 
 export function ResumeForms({ onPrint }: ResumeForms) {
     const [currentIndex, setCurrentIndex] = React.useState(0);
-    const { formData } = useResumeStore();
+    // const { formData } = useResumeStore();
 
     const sections = [
         { id: 1, title: "Personal Information", component: <PersonalInfoSection /> },
@@ -25,9 +25,9 @@ export function ResumeForms({ onPrint }: ResumeForms) {
         { id: 3, title: "Education", component: <EducationSection /> },
         { id: 4, title: "Skills", 
             component: <SkillsSection 
-                            experiences={formData.experiences} 
-                            educations={formData.educations} 
-                            isActive={currentIndex === 3}
+                            // experiences={formData.experiences} 
+                            // educations={formData.educations} 
+                            // isActive={currentIndex === 3}
                             /> },
         { id: 5, title: "Reference (3 persons only)", component: <ReferenceSection /> },
         { id: 6, title: "Summary", component: <SummarySection /> },
